@@ -12,6 +12,14 @@ app.get("/", (req, res) => {
 app.use(() => {
     throw (0, http_errors_1.default)(404, "rout not found");
 });
+const errorHandler = (err, req, res, next) => {
+    console.log(err.message, err.statuscode);
+    if (res.headersSent) {
+        return next(err);
+    }
+    res.status(err.statuscode || 500).json({ message: err.message });
+};
+app.use(errorHandler);
 app.listen(9000, () => {
     console.log("server started on port 9000");
 });
