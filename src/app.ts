@@ -4,9 +4,10 @@ import exampleRoute from "./routes/exampleRoutes";
 import mongoose from "mongoose";
 import { DB, PORT } from "./config";
 import { errorHandler } from "./middleware/errorHanlder";
-//import morgan from "morgan";
+import morgan from "morgan";
 const app = express();
 app.use(express.json());
+app.use(morgan("tiny"))
 
 app.use("/", exampleRoute);
 

@@ -9,9 +9,10 @@ const exampleRoutes_1 = __importDefault(require("./routes/exampleRoutes"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = require("./config");
 const errorHanlder_1 = require("./middleware/errorHanlder");
-//import morgan from "morgan";
+const morgan_1 = __importDefault(require("morgan"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use((0, morgan_1.default)("tiny"));
 app.use("/", exampleRoutes_1.default);
 app.use(() => {
     throw (0, http_errors_1.default)(404, "Route not found");

@@ -6,7 +6,7 @@ export const getExample: RequestHandler = (req, res, next) => {
   res.json({ message: "hello" });
 };
 export const getExampleData: RequestHandler = async (req, res, next) => {
-  const { name, id } = req.body;
+  const { name, id } :IExampleData= req.body;
 
   try {
     const example = await Example.findOne({ name });
