@@ -5,21 +5,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_errors_1 = __importDefault(require("http-errors"));
+const exampleRoutes_1 = __importDefault(require("./routes/exampleRoutes"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const config_1 = require("./config");
+const errorHanlder_1 = require("./middleware/errorHanlder");
+//import morgan from "morgan";
 const app = (0, express_1.default)();
-app.get("/", (req, res) => {
-    res.send("hello ji");
-});
+app.use(express_1.default.json());
+app.use("/", exampleRoutes_1.default);
 app.use(() => {
-    throw (0, http_errors_1.default)(404, "rout not found");
+    throw (0, http_errors_1.default)(404, "Route not found");
 });
-const errorHandler = (err, req, res, next) => {
-    console.log(err.message, err.statuscode);
-    if (res.headersSent) {
-        return next(err);
-    }
-    res.status(err.statuscode || 500).json({ message: err.message });
-};
-app.use(errorHandler);
-app.listen(9000, () => {
-    console.log("server started on port 9000");
+app.use(errorHanlder_1.errorHandler);
+mongoose_1.default
+    .connect("mongodb+srv://vikashrajpoot2995:Vikash@cluster0.h29u7vi.mongodb.net/Blog?retryWrites=true&w=majority")
+    .then(() => {
+    console.log("Connected to db");
+    app.listen(config_1.PORT || 9000, () => {
+        console.log(`Listening On PORT 9000`);
+    });
+})
+    .catch(() => {
+    throw (0, http_errors_1.default)(501, "Unable to connect database");
 });
